@@ -335,17 +335,25 @@ CasperRenderer.prototype.click = function(item) {
 }
 
 CasperRenderer.prototype.getFormSelector = function(item) {
-  var info = item.info;
+  var info = item.info,
+      tag = "form";
+  
   if(!info.form) {
     return '';
   }
-  if(info.form.name) {
-        return "form[name=" + info.form.name + "] ";
-    } else if(info.form.id) {
-    return "form#" + info.form.id + " ";
-  } else {
-    return "form ";
+  
+  if ( info.form.action ) {
+  	tag = tag+"[action=" + info.form.action + "] ";
   }
+  
+  if(info.form.name) {
+        return tag + "[name=" + info.form.name + "] ";
+    } else if(info.form.id) {
+    return tag + "#" + info.form.id + " ";
+  } else {
+    return tag + " ";
+  }
+  
 }
 
 CasperRenderer.prototype.keypress = function(item) {
