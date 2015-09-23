@@ -132,7 +132,6 @@ CasperRenderer.prototype.render = function(with_xy) {
   this.with_xy = with_xy;
   var etypes = EventTypes;
   this.document.open();
-  this.document.writeln('<button id="casperbox-button">Run it on Casperbox</button>');
   this.document.write("<" + "pre" + ">");
   this.writeHeader();
   var last_down = null;
