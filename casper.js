@@ -383,7 +383,7 @@ CasperRenderer.prototype.change = function(item) {
     this.stmt('            document.querySelector('+selector+').value = "'+item.info.value+'";');
     this.stmt('            return true;');
     this.stmt('        });');
-    this.stmt('        // Firing onchange event
+    this.stmt('        // Firing onchange event');
     this.stmt('        this.evaluate(function() {');
     this.stmt('            var element = document.querySelector(' + selector + ');');
     this.stmt('            var evt = document.createEvent("HTMLEvents");');
