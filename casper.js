@@ -30,7 +30,7 @@ EventTypes.MouseDown = 19;
 EventTypes.MouseUp = 20;
 EventTypes.MouseDrag = 21;
 EventTypes.MouseDrop = 22;
-EventTypes.KeyPress = 23;
+EventTypes.KeyUp = 23;
 
 function CasperRenderer(document) {
   this.document = document;
@@ -122,7 +122,7 @@ d[EventTypes.ScreenShot] = "screenShot";
 /*d[EventTypes.MouseDown] = "mousedown";
 d[EventTypes.MouseUp] = "mouseup"; */
 d[EventTypes.MouseDrag] = "mousedrag";
-d[EventTypes.KeyPress] = "keypress";
+d[EventTypes.KeyUp] = "keyup";
 
 CasperRenderer.prototype.dispatch = d;
 
@@ -356,7 +356,7 @@ CasperRenderer.prototype.getFormSelector = function(item) {
   
 }
 
-CasperRenderer.prototype.keypress = function(item) {
+CasperRenderer.prototype.keyup = function(item) {
   var text = item.text.replace('\n','').replace('\r', '\\r');
 
   this.stmt('casper.waitForSelector("' + this.getControl(item) + '",');
