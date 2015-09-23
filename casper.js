@@ -103,7 +103,7 @@ CasperRenderer.prototype.cleanStringForXpath = function(str, escape)  {
 var d = {};
 d[EventTypes.OpenUrl] = "openUrl";
 d[EventTypes.Click] = "click";
-//d[EventTypes.Change] = "change";
+d[EventTypes.Change] = "change";
 d[EventTypes.Comment] = "comment";
 d[EventTypes.Submit] = "submit";
 d[EventTypes.CheckPageTitle] = "checkPageTitle";
@@ -366,6 +366,37 @@ CasperRenderer.prototype.submit = function(item) {
   // so no need to trigger it.
   this.stmt("/* submit form */");
 }
+
+CasperRenderer.prototype.change = function(item) {
+  // the submit has been called somehow (user, or script)
+  // so no need to trigger it.
+
+  var tag = item.info.tagName.toLowerCase();
+  if(tag=='select' && item.info.value) {
+    var selector;
+    selector = this.getFormSelector(item) + this.getControl(item);
+    selector = '"' + selector + '"';
+    this.stmt('casper.waitForSelector('+ selector + ',');
+    this.stmt('    function success() {');
+    this.stmt('        test.assertExists('+ selector + ');');
+    this.stmt('        this.evaluate(function(valueOptionSelect){');
+    this.stmt('            document.querySelector('+selector+').value = "'+item.info.value+'";');
+    this.stmt('            return true;');
+    this.stmt('        });');
+    this.stmt('        // Firing onchange event
+    this.stmt('        this.evaluate(function() {');
+    this.stmt('            var element = document.querySelector(' + selector + ');');
+    this.stmt('            var evt = document.createEvent("HTMLEvents");');
+    this.stmt('            evt.initEvent("change", false, true);');
+    this.stmt('            element.dispatchEvent(evt);');
+    this.stmt('        });');
+    this.stmt('    },');
+    this.stmt('    function fail() {');
+    this.stmt('        test.assertExists(' + selector + ');');
+    this.stmt('});');
+  }
+}
+
 
 CasperRenderer.prototype.screenShot = function(item) {
   // wait 1 second is not the ideal solution, but will be enough most
