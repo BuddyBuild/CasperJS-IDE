@@ -337,7 +337,7 @@ CasperRenderer.prototype.click = function(item) {
 CasperRenderer.prototype.getFormSelector = function(item) {
   var info = item.info,
       tag = "form";
-  
+
   if(!info.form) {
     return '';
   }
@@ -379,6 +379,7 @@ CasperRenderer.prototype.change = function(item) {
   // so no need to trigger it.
 
   var tag = item.info.tagName.toLowerCase();
+
   if(tag=='select' && item.info.value) {
     var selector;
     selector = this.getFormSelector(item) + this.getControl(item);

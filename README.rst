@@ -1,22 +1,27 @@
-Resurrectio
+
+
+
+CasperJS-IDE
 ===========
 
 **Any phantom deserves a resurrection.**
 
-Resurrectio is a Chrome extension allowing to record a sequence of browser
+CasperJS-IDE is a Chrome extension allowing to record a sequence of browser
 actions and to produce the corresponding `CasperJS  <http://casperjs.org/>`_
 script.
-
-Resurrectio uses minimalist and functional-oriented selectors, so recorded
-sequences stay valid across layout and design changes.
 
 As **CasperJS evaluates JavaScript**, recorded sequences are not limited
 to pure HTML interactions, targeted pages JavaScript-supported behaviors will
 be accurately reproduced.
 
-Resurrectio also provides a way to produce **screenshots** alongside your test
+This extension also provides a way to produce **screenshots** alongside your test
 scenario, and can export comments + screenshots in ReStructuredText format in
 order to generate documentation automatically from the test sequences.
+
+**Check also original plugin**
+
+CasperJS-IDE based on Resurrectio (https://github.com/ebrehault/resurrectio) created by Makina Corpus <ebrehault@gmail.com>
+
 
 Installation
 ============
@@ -29,32 +34,26 @@ be careful CasperJS requires PhantomJS >= 1.8.2.
 
 Install `CasperJS <http://casperjs.org/installation.html>`_ version 1.1.
 
-Resurrectio installation
+CasperJS-IDE installation
 -------------------------
-
-From Chrome store:
-
-Go to `Chrome store Resurrectio page <https://chrome.google.com/webstore/detail/resurrectio/kicncbplfjgjlliddogifpohdhkbjogm>`_ and click on the Add button.
-
-OR
 
 From Github sources::
 
-    git clone git://github.com/ebrehault/resurrectio.git
+    git clone git@github.com:MaximOrlovsky/CasperJS-IDE.git
 
-It will produce a ./resurrectio folder.
+It will produce a ./CasperJS-IDE folder.
 
 Then, in Chrome:
 
     - go to **Tools / Extensions**,
     - expand **Developer mode**,
     - click **Load unpacked extension**,
-    - select the ./resurrectio folder.
+    - select the ./CasperJS-IDE folder.
 
 Usage
 =====
 
-Click on the Resurrectio extension icon.
+Click on the extension icon.
 
 Enter the start URL, and click Go.
 
@@ -74,8 +73,7 @@ click **Stop recording**.
 
 Now, generate the CasperJS test script by clicking **Export Casper test**.
 
-You might run the script directly on `CasperBox.com <http://casperbox.com/>`_,
-or you can copy/paste the resulting code into a local file, and run the test::
+You might copy/paste the resulting code into a local file, and run the test::
 
     casperjs test my_scenario.js
 
@@ -91,13 +89,14 @@ Credits
 
 Author
 ------
+* Max Orlovsky <hello@sattu.net>
+* CasperJS-IDE event recorder is based on the Resurrectio tool, created by Eric BREHAULT <eric.brehault@makina-corpus.org>
 
+Resurrectio Author
+------
 * Eric BREHAULT <eric.brehault@makina-corpus.org>
-
 * Resurrectio event recorder is based on the zope.recorder tool, created by Brian Lloyd <brian@zope.com>
 
-Companies
----------
 |makinacom|_
 
 * `Makina Corpus blog <http://makina-corpus.com/blog/metier/>`_

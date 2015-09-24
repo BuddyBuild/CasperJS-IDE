@@ -3,10 +3,14 @@
   "version": "0.5",
   "manifest_version": 2,
   "description": "Functional-oriented and javascript-friendly test recorder. Exports CasperJS scripts. Supports screenshots.",
-  "icons": {"48": "makina-icon.png",
-          "128": "makina-icon-128.png" },
+  "icons": { // http://findicons.com/icon/558215/test_tube#
+    "26": "img/icon/icon-26.png",
+    "32": "img/icon/icon-32.png",
+    "48": "img/icon/icon-48.png",
+    "128": "img/icon/icon-128.png"
+  },
   "browser_action": {
-    "default_icon": "makina-icon.png",
+    "default_icon": "img/icon/icon-26.png",
     "default_popup": "control.html",
     "default_title": "CasperJS test recorder"
   },

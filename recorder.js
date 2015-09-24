@@ -308,8 +308,15 @@ TestRecorder.ElementInfo = function(element) {
     this.type = element.type;
     if (this.type)
         this.type = this.type.toLowerCase();
-    if (element.form)
-        this.form = {id: element.form.id, name: element.form.name};
+    if (element.form) {
+        this.form = {
+            id: element.form.id,
+            name: element.form.name,
+            action: element.form.action.substr(0, element.form.action.indexOf('#')) || '',
+            method: element.form.method || 'get',
+            classNames: element.form.class || ''
+        };
+    }
     this.src = element.src;
     this.id = element.id;
     this.title = element.title;
