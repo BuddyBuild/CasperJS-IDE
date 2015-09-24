@@ -89,7 +89,7 @@ Credits
 
 Author
 ------
-* Max Orlovsky <hello@sattu.net>
+* Max Orlovsky <mailto:work@sattu.net>
 * CasperJS-IDE event recorder is based on the Resurrectio tool, created by Eric BREHAULT <eric.brehault@makina-corpus.org>
 
 Resurrectio Author
@@ -99,15 +99,11 @@ Resurrectio Author
 
 |makinacom|_
 
-* `Makina Corpus blog <http://makina-corpus.com/blog/metier/>`_
-* `Contact us <mailto:python@makina-corpus.org>`_
+* `Resurrectio Author: Makina Corpus blog <http://makina-corpus.com/blog/metier/>`_
+* `Contact Resurrectio author <mailto:python@makina-corpus.org>`_
 
 
 .. |makinacom| image:: http://depot.makina-corpus.org/public/logo.gif
 .. _makinacom:  http://www.makina-corpus.com
 
-
-.. image:: https://d2weczhvl823v0.cloudfront.net/ebrehault/resurrectio/trend.png
-   :alt: Bitdeli badge
-   :target: https://bitdeli.com/free
 
