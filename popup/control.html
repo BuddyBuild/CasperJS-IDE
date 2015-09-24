@@ -1,0 +1,46 @@
+<html>
+<head>
+
+    <title>Test Recorder</title>
+
+    <link rel="stylesheet" type="text/css" href="style.css" />
+
+    <script src="control.js"></script>
+</head>
+<body>
+<form name="control">
+
+    <h1>CasperJS IDE</h1>
+
+    <div>
+        <div class="url">
+            <strong>URL:</strong>
+            <input type="text" size="80" name="url" />
+        </div>
+        <input type="submit" id="bgo" name="submit" value=" Go " />
+
+        <input type="submit" class="green" id="bstop" name="bstop" value="Stop Recording" style="display:none;" />
+        <input type="submit" class="gray" id="bcomment" name="bcomment" value="Add Comment" style="display: none;" />
+
+        <input type="submit" class="green" id="bexport" name="bexport" value="Export CasperJS" style="display: none;" />
+
+        <input type="submit" class="gray" id="bexportxy" name="bexportxy" value="Export CasperJS with (x,y) coords" style="display: none;" />
+        <input type="submit" class="gray" id="bdoc" name="bdoc" value="Export doc" style="display: none;" />
+
+    </div>
+    <div id="comment" style="display:none">
+        <strong>Comment:</strong>
+  <textarea id="ctext" id="ctext" name="ctext"
+            rows="8" cols="80"></textarea>
+        <br />
+        <input type="submit" id="bsavecomment" name="c1" value=" Save " />
+        <input type="submit" id="bcancelcomment" name="c2" value=" Cancel " />
+    </div>
+</form>
+
+<p class="tagline">
+    CasperJS-IDE based on <a href="https://github.com/ebrehault/resurrectio" target="_new">Resurrectio</a>
+</p>
+
+</body>
+</html>

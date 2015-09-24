@@ -1,0 +1,52 @@
+body { 
+  font-family: verdana; 
+  font-size: 80%;
+  text-decoration: none;
+  color: #555753; 
+  background: #ffffff;
+  margin: 0px;
+	font-family: Arial, sans-serif;
+	padding: 10px 20px;
+}
+
+div.url {
+	margin-bottom: 20px;
+}
+	div.url input[name="url"] {
+		padding: 5px 5px;
+	}
+
+.tagline {
+	position: absolute;
+	bottom: 0;
+	font-size: .8em;
+}
+.tagline , .tagline a {
+	color: grey;
+}
+
+#logo {
+	float: right;
+}
+
+input[type=submit].green, input[type=button].green {
+	background-color: #396;
+	color: #efe;
+}
+
+input[type=submit].gray, input[type=button].gray {
+	background-color: #999;
+	color: eee;
+}
+
+input[type=submit], input[type=button] {
+	border: 0;
+	color:#eef;
+	padding:0.25em 0.5em;
+	background: none repeat scroll 0 0 #369;
+	font-size: 1.2em;
+	border-radius: 0.5em;
+	-webkit-border-radius: 0.5em;
+	-moz-border-radius: 0.5em;
+	cursor: pointer;
+}

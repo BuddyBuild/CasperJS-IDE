@@ -148,6 +148,5 @@ window.onload = function(){
     document.querySelector('input#bdoc').onclick=function() {ui.exportdoc(); return false;};
     document.querySelector('input#bsavecomment').onclick=function() {ui.hidecomment(true); return false;};
     document.querySelector('input#bcancelcomment').onclick=function() {ui.hidecomment(false); return false;};
-    document.querySelector('#tagline').onclick=function() {this.innerText='Omne phantasma resurrectionem suam promit.'};
     ui = new RecorderUI();
 }

@@ -4,7 +4,7 @@
 CasperJS-IDE
 ===========
 
-**Any phantom deserves a resurrection.**
+**UI tests recorder directly from your browser.**
 
 CasperJS-IDE is a Chrome extension allowing to record a sequence of browser
 actions and to produce the corresponding `CasperJS  <http://casperjs.org/>`_

@@ -11,7 +11,7 @@
   },
   "browser_action": {
     "default_icon": "img/icon/icon-26.png",
-    "default_popup": "control.html",
+    "default_popup": "popup/control.html",
     "default_title": "CasperJS test recorder"
   },
   "background": {
