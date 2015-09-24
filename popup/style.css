@@ -30,13 +30,11 @@ div.url {
 }
 
 input[type=submit].green, input[type=button].green {
-	background-color: #396;
-	color: #efe;
+	background-color: #396;color: #efe;
 }
 
 input[type=submit].gray, input[type=button].gray {
-	background-color: #999;
-	color: eee;
+	background-color: #999;color: #eee;
 }
 
 input[type=submit], input[type=button] {
