@@ -87,7 +87,7 @@ Implement more mouse events, like drag & drop and mousewheel.
 Credits
 =======
 
-Author
+Author of changes
 ------
 * Max Orlovsky <mailto:work@sattu.net>
 * CasperJS-IDE event recorder is based on the Resurrectio tool, created by Eric BREHAULT <eric.brehault@makina-corpus.org>
