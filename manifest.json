@@ -1,5 +1,5 @@
 {
-  "name": "Resurrectio",
+  "name": "CasperJS IDE",
   "version": "0.5",
   "manifest_version": 2,
   "description": "Functional-oriented and javascript-friendly test recorder. Exports CasperJS scripts. Supports screenshots.",
