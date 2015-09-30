@@ -51,6 +51,8 @@ if (typeof(TestRecorder.Browser) == "undefined") {
     TestRecorder.Browser = {};
 }
 
+/* ********************************************************** */
+
 TestRecorder.Browser.captureEvent = function(wnd, name, func) {
     var lname = name.toLowerCase();
     var doc = wnd.document;
@@ -312,9 +314,11 @@ TestRecorder.ElementInfo = function(element) {
         this.form = {
             id: element.form.id,
             name: element.form.name,
-            action: element.form.action.substr(0, element.form.action.indexOf('#')) || '',
-            method: element.form.method || 'get',
-            classNames: element.form.class || ''
+            //action: element.form.getAttribute('action') || '',
+            method: element.form.method || 'get'
+            /*,
+            classNames: element.form.className || ''
+            */
         };
     }
     this.src = element.src;
@@ -461,6 +465,9 @@ TestRecorder.KeyEvent = function(target, text) {
 TestRecorder.MouseEvent = function(type, target, x, y) {
     this.type = type;
     this.info = new TestRecorder.ElementInfo(target);
+    console.log('---------------');
+    console.log(this.info);
+    console.log('---------------');
     this.x = x;
     this.y = y;
     this.text = recorder.strip(contextmenu.innertext(target));
@@ -820,6 +827,57 @@ TestRecorder.Recorder = function() {
 recorder = new TestRecorder.Recorder();
 recorder.logfunc = function(msg) {console.log(msg);};
 
+/*
+NodeList.prototype.forEach = Array.prototype.forEach;
+
+ function onOverRun(){
+    console.log('onOR1');
+    document.querySelectorAll('a').forEach(function(el){
+        el.addEventListener('mouseover', function(e) {
+            e.target.style.outline = 'solid 2px red';
+        }, false);
+    });
+};
+
+function onOverHalt(){
+    console.log('onOH1');
+    document.querySelectorAll('a').forEach(function(el){
+        el.removeEventListener('mouseover', onOverRun, false);
+    });
+};
+
+
+onOutRun = function(){
+    return!1;
+    console.log('onOR2');
+    document.querySelector('*').addEventListener('mouseout', function(e) {
+        e.target.style.outline = 'none';
+    }, false);
+};
+onOutHalt = function(){
+    return!1;
+    console.log('onOH2');
+    document.querySelector('*').removeEventListener('mouseout', onOutRun, false);
+};
+
+
+TestRecorder.Recorder.prototype.highlighter = {
+    elements : function () {
+        return document.querySelector('*');
+    },
+
+    start : function() {
+        onOverRun();
+        //onOutRun();
+    },
+    stop : function() {
+        onOverHalt();
+        //onOutHalt();
+    }
+};
+*/
+
+
 TestRecorder.Recorder.prototype.start = function() {
     this.window = window;
     this.captureEvents();
@@ -836,14 +894,20 @@ TestRecorder.Recorder.prototype.start = function() {
     script.textContent = actualCode;
     (document.head||document.documentElement).appendChild(script);
     script.parentNode.removeChild(script);
-    
+
+    //this.highlighter.start();
+
     this.active = true;
+
     this.log("recorder started");
 }
 
 TestRecorder.Recorder.prototype.stop = function() {
     this.releaseEvents();
     this.active = false;
+
+    //this.highlighter.stop();
+
     this.log("recorder stopped");
     return;
 }
@@ -1112,3 +1176,6 @@ chrome.runtime.sendMessage({action: "get_status"}, function(response) {
         recorder.start();
     }
 });
+
+
+/* Better view finder ************************************************** */

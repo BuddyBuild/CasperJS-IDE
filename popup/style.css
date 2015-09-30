@@ -25,17 +25,24 @@ div.url {
 	color: grey;
 }
 
-#logo {
-	float: right;
+.logo-image {
+	vertical-align: top;
 }
 
-input[type=submit].green, input[type=button].green {
-	background-color: #396;color: #efe;
+input#bexport {
+	background-color: #396;
+	color: #efe;
+}
+input#bstop {
+	background-color: #933;
+	color: #fee;
+}
+input#bexportxy ,
+input#bdoc {
+	background-color: #999;
+	color: #eee;
 }
 
-input[type=submit].gray, input[type=button].gray {
-	background-color: #999;color: #eee;
-}
 
 input[type=submit], input[type=button] {
 	border: 0;

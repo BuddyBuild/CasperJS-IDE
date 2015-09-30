@@ -332,7 +332,7 @@ CasperRenderer.prototype.click = function(item) {
     this.stmt('        test.assertExists(' + selector + ');')
     this.stmt('});');
   }
-}
+};
 
 CasperRenderer.prototype.getFormSelector = function(item) {
   var info = item.info,
@@ -343,7 +343,7 @@ CasperRenderer.prototype.getFormSelector = function(item) {
   }
   
   if ( info.form.action ) {
-  	tag = tag+"[action=" + info.form.action + "]";
+    tag = tag+"[action='" + info.form.action + "']";
   }
   
   if(info.form.name) {
@@ -354,7 +354,7 @@ CasperRenderer.prototype.getFormSelector = function(item) {
     return tag + " ";
   }
   
-}
+};
 
 CasperRenderer.prototype.keyup = function(item) {
   var text = item.text.replace('\n','').replace('\r', '\\r');
