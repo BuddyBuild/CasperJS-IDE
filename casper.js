@@ -346,7 +346,7 @@ CasperRenderer.prototype.getFormSelector = function(item) {
   }
   
   if ( info.form.action ) {
-    tag = tag+"[action='" + info.form.action + "']";
+    tag = tag+"[action"+ info.form.actionCompare + "'" + info.form.action + "']";
   }
   
   if(info.form.name) {

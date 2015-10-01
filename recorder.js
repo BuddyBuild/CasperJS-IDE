@@ -299,6 +299,9 @@ TestRecorder.EventTypes.MouseDrop = 22;
 TestRecorder.EventTypes.KeyPress = 23;
 
 TestRecorder.ElementInfo = function(element) {
+    var tmpFormAction = '',
+        tmpFormCompare = '=';
+
     this.action = element.action;
     this.method = element.method;
     this.href = element.href;
@@ -308,13 +311,20 @@ TestRecorder.ElementInfo = function(element) {
     this.checked = element.checked;
     this.name = element.name;
     this.type = element.type;
-    if (this.type)
+    if (this.type) {
         this.type = this.type.toLowerCase();
-    if (element.form) {
+    }
+    if ( element.form ) {
+        tmpFormAction = element.form.getAttribute('action');
+        if ( tmpFormAction.indexOf('#') ) {
+            tmpFormAction = tmpFormAction.substr(0,tmpFormAction.indexOf('#'));
+            tmpFormCompare = '^=';
+        }
         this.form = {
             id: element.form.id,
             name: element.form.name,
-            //action: element.form.getAttribute('action') || '',
+            action: tmpFormAction || '',
+            actionCompare: tmpFormCompare,
             method: element.form.method || 'get'
             /*,
             classNames: element.form.className || ''
@@ -465,9 +475,6 @@ TestRecorder.KeyEvent = function(target, text) {
 TestRecorder.MouseEvent = function(type, target, x, y) {
     this.type = type;
     this.info = new TestRecorder.ElementInfo(target);
-    console.log('---------------');
-    console.log(this.info);
-    console.log('---------------');
     this.x = x;
     this.y = y;
     this.text = recorder.strip(contextmenu.innertext(target));
@@ -886,7 +893,7 @@ TestRecorder.Recorder.prototype.start = function() {
     var actualCode = '(' + function() {
         var overloadStopPropagation = Event.prototype.stopPropagation;
         Event.prototype.stopPropagation = function(){
-            console.log(this);
+            //console.log(this);
             overloadStopPropagation.apply(this, arguments);
         };
     } + ')();';
