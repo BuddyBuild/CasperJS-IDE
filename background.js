@@ -37,4 +37,29 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   if (request.action == "get_items") {
 	sendResponse({'items': testcase_items});
   }
+  if (request.action == "log") {
+    //sendResponse({'items': testcase_items});
+    alert(JSON.stringify(request));
+  }
+});
+
+chrome.browserAction.onClicked.addListener(function(tab){
+  chrome.windows.create({
+    url: 'popup/control.html',
+    left: 50,
+    top: 10,
+    width : 300,
+    height : 600,
+    focused : true,
+    type: 'popup'
+  }, function(window){
+    window.moveTo(
+        window.screen.width - 350,
+        50
+    );
+    window.resizeTo(
+        300,
+        window.screen.height - 100
+    )
+  });
 });

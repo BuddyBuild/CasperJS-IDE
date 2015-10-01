@@ -14,6 +14,7 @@ div.url {
 }
 	div.url input[name="url"] {
 		padding: 5px 5px;
+		width: 100%;
 	}
 
 .tagline {

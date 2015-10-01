@@ -39,8 +39,13 @@ function RecorderUI() {
 	    	if (!response.empty) {
 	            ui.set_stopped();
 	        }
-	        chrome.tabs.getSelected(null, function(tab) {
+	        //chrome.tabs.getSelected(null, function(tab) {
+            chrome.tabs.query({
+                active : true,
+                lastFocusedWindow : true
+            }, function(tab){
                   document.forms[0].elements["url"].value = tab.url;
+                  document.forms[0].elements["url"].value = JSON.stringify(tab);
             });
 	    }
 	});

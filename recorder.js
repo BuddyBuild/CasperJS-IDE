@@ -249,6 +249,7 @@ TestRecorder.TestCase = function() {
 TestRecorder.TestCase.prototype.append = function(o) {
     this.items[this.items.length] = o;
     chrome.runtime.sendMessage({action: "append", obj: o});
+    chrome.runtime.sendMessage({action: "log", data: this.items});
 }
 
 TestRecorder.TestCase.prototype.peek = function() {
@@ -258,6 +259,7 @@ TestRecorder.TestCase.prototype.peek = function() {
 TestRecorder.TestCase.prototype.poke = function(o) {
     this.items[this.items.length - 1] = o;
     chrome.runtime.sendMessage({action: "poke", obj: o});
+    chrome.runtime.sendMessage({action: "log", data: this.items});
 }
 
 
