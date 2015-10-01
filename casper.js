@@ -42,6 +42,9 @@ function CasperRenderer(document) {
   this.unamed_element_id = 1;
 }
 
+//CasperRenderer.prototype.waitForFunction = 'waitForSelector';
+CasperRenderer.prototype.waitForFunction = 'waitUntilVisible';
+
 CasperRenderer.prototype.text = function(txt) {
   // todo: long lines
   this.document.writeln(txt);
@@ -323,7 +326,7 @@ CasperRenderer.prototype.click = function(item) {
     } else {
       selector = '"' + item.info.selector + '"';
     }
-    this.stmt('casper.waitForSelector('+ selector + ',');
+    this.stmt('casper.'+this.waitForFunction+'('+ selector + ',');
     this.stmt('    function success() {');
     this.stmt('        test.assertExists('+ selector + ');');
     this.stmt('        this.click('+ selector + ');');
@@ -359,7 +362,7 @@ CasperRenderer.prototype.getFormSelector = function(item) {
 CasperRenderer.prototype.keyup = function(item) {
   var text = item.text.replace('\n','').replace('\r', '\\r');
 
-  this.stmt('casper.waitForSelector("' + this.getControl(item) + '",');
+  this.stmt('casper.'+this.waitForFunction+'("' + this.getControl(item) + '",');
   this.stmt('    function success() {');
   this.stmt('        this.sendKeys("' + this.getControl(item) + '", "' + text + '");');
   this.stmt('    },');
@@ -384,7 +387,7 @@ CasperRenderer.prototype.change = function(item) {
     var selector;
     selector = this.getFormSelector(item) + this.getControl(item);
     selector = '"' + selector + '"';
-    this.stmt('casper.waitForSelector('+ selector + ',');
+    this.stmt('casper.'+this.waitForFunction+'('+ selector + ',');
     this.stmt('    function success() {');
     this.stmt('        test.assertExists('+ selector + ');');
     this.stmt('        this.evaluate(function(valueOptionSelect){');
@@ -516,7 +519,7 @@ CasperRenderer.prototype.checkImageSrc = function(item) {
 }
 
 CasperRenderer.prototype.waitAndTestSelector = function(selector) {
-  this.stmt('casper.waitForSelector(' + selector + ',');
+  this.stmt('casper.'+this.waitForFunction+'(' + selector + ',');
   this.stmt('    function success() {');
   this.stmt('        test.assertExists(' + selector + ');')
   this.stmt('      },');
