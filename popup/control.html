@@ -3,50 +3,61 @@
 
     <title>Test Recorder</title>
 
-    <link rel="stylesheet" type="text/css" href="style.css" />
+    <link rel="stylesheet" type="text/css" href="style.css"/>
 
     <script src="control.js"></script>
 </head>
 <body>
-<form name="control">
+<div class="container">
 
-    <h1>
-        <img class="logo-image" src="../img/icon/icon-26.png">
-        CasperJS IDE
-    </h1>
+    <form name="control">
 
-    <div>
-        <div class="url">
-            <strong>URL:</strong>
-            <input type="text" name="url" />
+        <div class="header">
+            <h1>
+                <img class="logo-image" src="../img/icon/icon-26.png">
+                CasperJS IDE
+            </h1>
         </div>
-        <input type="submit" id="bgo" name="submit" value=" Go " />
 
-        <input type="submit" id="bstop" name="bstop" value="Stop Recording" style="display:none;" />
-        <input type="submit" id="bcomment" name="bcomment" value="Add Comment" style="display: none;" />
+        <div class="body">
+            <div>
+                <div class="url">
+                    <strong>URL:</strong>
+                    <input type="text" name="url"/>
+                </div>
 
-        <input type="submit" id="bexport" name="bexport" value="Export CasperJS" style="display: none;" />
+                <input type="submit" id="bgo" name="submit" value=" Go "/>
 
-        <input type="submit" id="bexportxy" name="bexportxy" value="Export CasperJS with (x,y) coords" style="display: none;" />
-        <input type="submit" id="bdoc" name="bdoc" value="Export doc" style="display: none;" />
+                <input type="submit" id="bstop" name="bstop" value="Stop Recording" style="display:none;"/>
+                <input type="submit" id="bcomment" name="bcomment" value="Add Comment" style="display: none;"/>
 
-    </div>
-    <div id="comment" style="display:none">
-        <strong>Comment:</strong>
-  <textarea id="ctext" id="ctext" name="ctext"
-            rows="8" cols="80"></textarea>
-        <br />
-        <input type="submit" id="bsavecomment" name="c1" value=" Save " />
-        <input type="submit" id="bcancelcomment" name="c2" value=" Cancel " />
-    </div>
-</form>
+                <input type="submit" id="bexport" name="bexport" value="Export CasperJS" style="display: none;"/>
 
-<p class="tagline">
-    &mdash;
-    <a href="https://github.com/MaximOrlovsky/CasperJS-IDE">CasperJS-IDE</a>
-    based on
-    <a href="https://github.com/ebrehault/resurrectio" target="_new">Resurrectio</a>
-</p>
+                <input type="submit" id="bexportxy" name="bexportxy" value="Export CasperJS with (x,y) coords"
+                       style="display: none;"/>
+                <input type="submit" id="bdoc" name="bdoc" value="Export doc" style="display: none;"/>
 
+            </div>
+            <div id="comment" style="display:none">
+                <strong>Comment:</strong>
+                <textarea id="ctext" id="ctext" name="ctext" rows="8" cols="80"></textarea>
+                <br/>
+                <input type="submit" id="bsavecomment" name="c1" value=" Save "/>
+                <input type="submit" id="bcancelcomment" name="c2" value=" Cancel "/>
+            </div>
+        </div>
+
+
+    </form>
+
+    <p class="tagline">
+        &mdash;
+        <a href="https://github.com/MaximOrlovsky/CasperJS-IDE">CasperJS-IDE</a>
+        based on
+        <a href="https://github.com/ebrehault/resurrectio" target="_new">Resurrectio</a>
+    </p>
+
+</div>
+<!-- /container -->
 </body>
 </html>

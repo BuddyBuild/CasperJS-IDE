@@ -1,13 +1,47 @@
-body { 
-  font-family: verdana; 
+body {
+	font-family: Arial, sans-serif;
   font-size: 80%;
   text-decoration: none;
   color: #555753; 
   background: #ffffff;
-  margin: 0px;
-	font-family: Arial, sans-serif;
+  margin: 0;
+	padding: 0;
+
+}
+
+ /** ************************************************ */
+
+div.container {
+	padding: 0;
+}
+
+div.container .header,
+div.container .body {
 	padding: 10px 20px;
 }
+
+div.container .header {
+	background: #69c;
+	color: #fff;
+}
+
+div.container .header h1 {
+	font-size: 2em;
+	font-weight: bold;
+}
+
+div.container .header .logo-image {
+	background: #fff;
+	border-radius: 100%;
+	padding: 6px;
+	vertical-align: middle;
+	opacity: .5;
+}
+
+
+/** ************************************************ */
+
+
 
 div.url {
 	margin-bottom: 20px;
@@ -26,9 +60,6 @@ div.url {
 	color: grey;
 }
 
-.logo-image {
-	vertical-align: top;
-}
 
 input#bexport {
 	background-color: #396;

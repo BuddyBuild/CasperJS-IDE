@@ -32,25 +32,38 @@ RecorderProxy.prototype.addComment = function(text, callback) {
 //----------------------------------------------
 function RecorderUI() {
 	this.recorder = new RecorderProxy();
+
+    //chrome.tabs.getSelected(null, function(tab) {
+    //chrome.tabs.query({
+    //   active : true,
+    //   lastFocusedWindow : true
+    //}, function(tab){
+    //   alert(3);
+    //     document.forms[0].elements["url"].value = tab.url;
+    //     document.forms[0].elements["url"].value = JSON.stringify(tab);
+    //});
+
 	chrome.runtime.sendMessage({action: "get_status"}, function(response) {
+        alert(11);
 	    if (response.active) {
 	    	ui.set_started();
 	    } else {
 	    	if (!response.empty) {
 	            ui.set_stopped();
 	        }
-	        //chrome.tabs.getSelected(null, function(tab) {
-            chrome.tabs.query({
-                active : true,
-                lastFocusedWindow : true
-            }, function(tab){
-                  document.forms[0].elements["url"].value = tab.url;
-                  document.forms[0].elements["url"].value = JSON.stringify(tab);
-            });
 	    }
 	});
-  
+
 }
+
+RecorderUI.prototype.getTargetDetails = function(){
+    chrome.runtime.sendMessage({action: "get_tab_details"}, function(response) {
+        alert('RESPONSE : ' + JSON.stringify(response));
+        //if ( response[0] && response[0].hasOwnProperty('url')) {
+        //    document.querySelector('input[name="url"]').value = response[0].url;
+        //}
+    });
+};
 
 RecorderUI.prototype.start = function() {
     var url = document.forms[0].elements["url"].value;
@@ -60,7 +73,7 @@ RecorderUI.prototype.start = function() {
     if ( (url.indexOf("http://") == -1) && (url.indexOf("https://")) ) {
         url = "http://" + url;
     }
-    ui.set_started()
+    ui.set_started();
     ui.recorder.start(url);
   
     return false;
@@ -143,8 +156,11 @@ RecorderUI.prototype.exportdoc = function(bexport) {
 
 var ui;
 
-// bind events to ui elements
+ //bind events to ui elements
 window.onload = function(){
+    alert('indisde');
+    //alert('112321321' + JSON.stringify(tabs) );
+
     document.querySelector('input#bgo').onclick=function() {ui.start(); return false;};
     document.querySelector('input#bstop').onclick=function() {ui.stop(); return false;};
     document.querySelector('input#bcomment').onclick=function() {ui.showcomment(); return false;};
@@ -153,5 +169,8 @@ window.onload = function(){
     document.querySelector('input#bdoc').onclick=function() {ui.exportdoc(); return false;};
     document.querySelector('input#bsavecomment').onclick=function() {ui.hidecomment(true); return false;};
     document.querySelector('input#bcancelcomment').onclick=function() {ui.hidecomment(false); return false;};
+
     ui = new RecorderUI();
+
+    ui.getTargetDetails();
 }

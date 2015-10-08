@@ -14,8 +14,38 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     sendResponse({});
   }
   if (request.action == "get_status") {
-    sendResponse({'active': active, 'empty': empty});
+    if ( !active ) {
+      //, lastFocusedWindow : true
+      chrome.tabs.query({
+        active : true
+      }, function(tab){
+        sendResponse({'active': active, 'empty': empty});
+      });
+
+
+    //  chrome.tabs.query({
+    //    //active : true
+    ////    //, lastFocusedWindow : true
+    //  }, function(tab){
+    //    sendResponse({'active': active, 'empty': empty});
+    //  });
+    }
+    else {
+      sendResponse({'active': active, 'empty': empty});
+    }
   }
+  //
+  if (request.action == "get_tab_details") {
+    alert(33);
+    chrome.tabs.query({
+       active : true
+      //,       lastFocusedWindow : true
+    }, function(tab){
+      alert('TABSSSS ' + tab[0].url);
+         sendResponse({'details': tab[0].url});
+    });
+  }
+
   if (request.action == "start") {
   	if(!active) {
   	    active = true;
@@ -52,14 +82,26 @@ chrome.browserAction.onClicked.addListener(function(tab){
     height : 600,
     focused : true,
     type: 'popup'
-  }, function(window){
-    window.moveTo(
-        window.screen.width - 350,
-        50
-    );
-    window.resizeTo(
-        300,
-        window.screen.height - 100
-    )
+  }, function(win){
+
+    //console.log(win);
+    //
+    //win.onload = function(e) {
+    //  alert('loaded');
+    //  chrome.tabs.query({active: true}, function (tab) {
+    //    alert(tab[0].url);
+    //    win.content.document.querySelector('input[name="url"]').value = tab[0].url;
+    //    win.content.document.querySelector('h1').innerHTML = tab[0].url;
+    //  });
+    //}
+
+    //win.moveTo(
+    //    window.screen.width - 350,
+    //    50
+    //);
+    //win.resizeTo(
+    //    300,
+    //    window.screen.height - 100
+    //)
   });
 });
