@@ -199,7 +199,15 @@ CasperRenderer.prototype.writeHeader = function() {
   this.text("/* CasperJS-IDE  generated " + date + " */", 0);
   this.text("/*====================================================================*/", 0);
   this.space();
-  this.stmt("var retina       = true;", 0);
+  this.stmt("var casper = require('casper').create({", 0);
+  this.stmt("  verbose: false,", 0);
+  this.stmt('  logLevel: "debug"', 0);
+  this.stmt("});", 0);
+  this.stmt("var x = casper.selectXPath;", 0);
+  this.space();
+  this.stmt("var retina = casper.cli.options.noretina ? false : true;", 0);
+  this.stmt("var image  = casper.cli.options.image || 'screenshot.png';", 0);
+  this.space();
   this.stmt("var multiplier   = retina ? 2 : 1;", 0);
   this.stmt("var lastX        = 0;", 0);
   this.stmt("var lastY        = 0;", 0);
@@ -224,15 +232,10 @@ CasperRenderer.prototype.shortUrl = function(url) {
 
 CasperRenderer.prototype.startUrl = function(item) {
   var url = this.pyrepr(this.rewriteUrl(item.url));
-  this.stmt('var vpWidth      = ' + item.width + ' * multiplier;', 0);
-  this.stmt('var vpHeight     = ' + item.height + ' * multiplier;', 0);
   this.space();
-  this.stmt("var casper = require('casper').create({", 0);
-  this.stmt('  verbose:      false,', 1);
-  this.stmt('  logLevel:     "debug",', 1);
-  this.stmt("  viewportSize: { width: vpWidth, height: vpHeight };", 1);
-  this.stmt("});", 0);
-  this.stmt("var x = casper.selectXPath;", 0);
+  this.stmt('var vpWidth  = ' + item.width + ' * multiplier;', 0);
+  this.stmt('var vpHeight = ' + item.height + ' * multiplier;', 0);
+  this.stmt("casper.options.viewportSize = { width: vpWidth, height: vpHeight };", 0);
   this.space();
   this.stmt("casper.on('page.error', function(msg, trace) {", 0);
   this.stmt("this.echo('Error: ' + msg, 'ERROR');", 1);
@@ -246,6 +249,7 @@ CasperRenderer.prototype.startUrl = function(item) {
   this.stmt("casper.echo('Visiting ' + url, 'INFO')", 0);
   this.stmt("casper.start(url);", 0);
 }
+
 CasperRenderer.prototype.openUrl = function(item) {
   var url = this.pyrepr(this.rewriteUrl(item.url));
   var history = this.history;
@@ -351,6 +355,7 @@ CasperRenderer.prototype.click = function(item) {
     } else {
       selector = '"' + item.info.selector + '"';
     }
+    this.space();
     this.stmt('casper.' + this.waitForFunction + '(' + selector + ',', 0);
     this.stmt('  function success() {', 0);
     if (item.x != null || item.y != null) {
@@ -360,7 +365,7 @@ CasperRenderer.prototype.click = function(item) {
     this.stmt('    this.click('+ selector + ');', 0);
     this.stmt('  },', 0);
     this.stmt('  function fail() {', 0);
-    this.stmt('    this.echo("Cannot locate selector: "' + selector + '", "ERROR");', 0);
+    this.stmt("    this.echo('Cannot locate the active selector', 'ERROR');", 0);
     this.stmt('    this.exit();', 0);
     this.stmt('  }', 0);
     this.stmt(');', 0);
@@ -391,21 +396,22 @@ CasperRenderer.prototype.getFormSelector = function(item) {
 CasperRenderer.prototype.keyup = function(item) {
   var text = item.text.replace('\n','').replace('\r', '\\r');
 
-  this.stmt('casper.'+this.waitForFunction+'("' + this.getControl(item) + '",');
-  this.stmt('  function success() {');
-  this.stmt('    this.sendKeys("' + this.getControl(item) + '", "' + text + '");');
-  this.stmt('  },');
-  this.stmt('  function fail() {');
-  this.stmt('    this.echo("Cannot locate selector: "' + selector + '", "ERROR");');
-  this.stmt('    this.exit();');
-  this.stmt('  }');
-  this.stmt(');');
+  this.space();
+  this.stmt('casper.'+this.waitForFunction+'("' + this.getControl(item) + '",', 0);
+  this.stmt('  function success() {', 0);
+  this.stmt('    this.sendKeys("' + this.getControl(item) + '", "' + text + '");', 0);
+  this.stmt('  },', 0);
+  this.stmt('  function fail() {', 0);
+  this.stmt('    this.echo("Cannot locate control item", "ERROR");', 0);
+  this.stmt('    this.exit();', 0);
+  this.stmt('  }', 0);
+  this.stmt(');', 0);
 }
 
 CasperRenderer.prototype.submit = function(item) {
   // the submit has been called somehow (user, or script)
   // so no need to trigger it.
-  this.stmt("/* submit form */");
+  this.stmt("/* submit form */", 0);
 }
 
 CasperRenderer.prototype.change = function(item) {
@@ -418,25 +424,25 @@ CasperRenderer.prototype.change = function(item) {
     var selector;
     selector = this.getFormSelector(item) + this.getControl(item);
     selector = '"' + selector + '"';
-    this.stmt('casper.'+this.waitForFunction+'('+ selector + ',');
-    this.stmt('  function success() {');
-    this.stmt('    this.evaluate(function(valueOptionSelect){');
-    this.stmt('      document.querySelector('+selector+').value = "'+item.info.value+'";');
-    this.stmt('      return true;');
-    this.stmt('    });');
-    this.stmt('    // Firing onchange event');
-    this.stmt('    this.evaluate(function() {');
-    this.stmt('      var element = document.querySelector(' + selector + ');');
-    this.stmt('      var evt = document.createEvent("HTMLEvents");');
-    this.stmt('      evt.initEvent("change", false, true);');
-    this.stmt('      element.dispatchEvent(evt);');
-    this.stmt('    });');
-    this.stmt('  },');
-    this.stmt('  function fail() {');
-    this.stmt('    this.echo("Cannot locate selector: "' + selector + '", "ERROR");');
-    this.stmt('    this.exit();');
-    this.stmt('  }');
-    this.stmt(');');
+    this.stmt('casper.'+this.waitForFunction+'('+ selector + ',', 0);
+    this.stmt('  function success() {', 0);
+    this.stmt('    this.evaluate(function(valueOptionSelect){', 0);
+    this.stmt('      document.querySelector('+selector+').value = "'+item.info.value+'";', 0);
+    this.stmt('      return true;', 0);
+    this.stmt('    });', 0);
+    this.stmt('    // Firing onchange event', 0);
+    this.stmt('    this.evaluate(function() {', 0);
+    this.stmt('      var element = document.querySelector(' + selector + ');', 0);
+    this.stmt('      var evt = document.createEvent("HTMLEvents");', 0);
+    this.stmt('      evt.initEvent("change", false, true);', 0);
+    this.stmt('      element.dispatchEvent(evt);', 0);
+    this.stmt('    });', 0);
+    this.stmt('  },', 0);
+    this.stmt('  function fail() {', 0);
+    this.stmt('    this.echo("Cannot locate active selector.", "ERROR");', 0);
+    this.stmt('    this.exit();', 0);
+    this.stmt('  }', 0);
+    this.stmt(');', 0);
   }
 }
 
@@ -447,18 +453,18 @@ CasperRenderer.prototype.screenShot = function(item) {
   this.space();
   this.stmt('casper.wait(1000);', 0);
   this.stmt('casper.then(function() {', 0);
-  this.stmt('  this.evaluate(function() {', 0);
-  this.stmt('    document.body.style.webkitTransform = "scale(2)";', 0);
-  this.stmt('    document.body.style.webkitTransformOrigin = "0% 0%";', 0);
-  this.stmt('    document.body.style.width = "50%";', 0);
-  this.stmt('  });', 0);
+  this.stmt('  if (retina) {', 0);
+  this.stmt('    this.evaluate(function() {', 0);
+  this.stmt('      document.body.style.webkitTransform = "scale(2)";', 0);
+  this.stmt('      document.body.style.webkitTransformOrigin = "0% 0%";', 0);
+  this.stmt('      document.body.style.width = "50%";', 0);
+  this.stmt('    });', 0);
+  this.stmt('  }', 0);
   this.stmt('});', 0);
   this.space();
   this.stmt('casper.then(function() {', 0);
-  var filename = 'screenshot' + this.screen_id +'.png';
-  this.stmt('  var filename = "' + filename + '";', 0);
-  this.stmt('  this.captureSelector("' + filename + '", "html");', 0);
-  this.stmt("  postProcess += 'Marker: " + '"' + filename + '" ' + "' + lastX + 'x' + lastY + " + '"\\n");', 0);
+  this.stmt('  this.captureSelector(image, "html");', 0);
+  this.stmt("  postProcess = 'Marker: ' + lastX + 'x' + lastY + " + '"\\n";', 0);
   this.stmt('});', 0);
   this.screen_id += 1;
 }
@@ -572,7 +578,7 @@ CasperRenderer.prototype.waitAndTestSelector = function(selector) {
   this.stmt('  function success() {', 0);
   this.stmt('  },', 0);
   this.stmt('  function fail() {', 0);
-  this.stmt('    this.echo("Cannot locate selector: "' + selector + '", "ERROR");', 0);
+  this.stmt('    this.echo("Cannot locate the active selector!", "ERROR");', 0);
   this.stmt('    this.exit();', 0);
   this.stmt('});', 0);
 }
