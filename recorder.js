@@ -298,6 +298,7 @@ TestRecorder.EventTypes.MouseUp = 20;
 TestRecorder.EventTypes.MouseDrag = 21;
 TestRecorder.EventTypes.MouseDrop = 22;
 TestRecorder.EventTypes.KeyPress = 23;
+TestRecorder.EventTypes.Marker = 24;
 
 TestRecorder.ElementInfo = function(element) {
     var tmpFormAction = '',
@@ -482,6 +483,12 @@ TestRecorder.MouseEvent = function(type, target, x, y) {
     this.text = recorder.strip(contextmenu.innertext(target));
 }
 
+TestRecorder.MarkerEvent = function(x, y) {
+  this.type = TestRecorder.EventTypes.Marker;
+  this.x = x;
+  this.y = y;
+}
+
 TestRecorder.ScreenShotEvent = function() {
     this.type = TestRecorder.EventTypes.ScreenShot;
 }
@@ -514,6 +521,8 @@ TestRecorder.ContextMenu = function() {
     this.visible = false;
     this.over = false;
     this.menu = null;
+    this.x = null;
+    this.y = null;
 }
 
 contextmenu = new TestRecorder.ContextMenu();
@@ -589,9 +598,10 @@ TestRecorder.ContextMenu.prototype.build = function(t, x, y) {
     else {
         menu.appendChild(this.item("Check Page Location", this.checkPageLocation));
         menu.appendChild(this.item("Check Page Title", this.checkPageTitle));
-        menu.appendChild(this.item("Screenshot", this.doScreenShot));
     }
 
+    menu.appendChild(this.item("Add Click Marker", this.doMarker));
+    menu.appendChild(this.item("Screenshot", this.doScreenShot));
     menu.appendChild(this.item("Cancel", this.cancel));
 
     b.insertBefore(menu, b.firstChild);
@@ -625,6 +635,8 @@ TestRecorder.ContextMenu.prototype.show = function(e) {
     var ww = TestRecorder.Browser.windowWidth(wnd);
     var x = e.posX();
     var y = e.posY();
+    this.x = x;
+    this.y = y;
     if ((ww >= 0) && ((ww - x) < 100)) {
         x = x - 100;
     }
@@ -635,7 +647,6 @@ TestRecorder.ContextMenu.prototype.show = function(e) {
     this.menu = menu;
     menu.style.display = "";
     this.visible = true;
-    return;
 }
 
 TestRecorder.ContextMenu.prototype.hide = function() {
@@ -693,6 +704,11 @@ TestRecorder.ContextMenu.prototype.checkPageTitle = function() {
     var et = TestRecorder.EventTypes;
     var e = new TestRecorder.DocumentEvent(et.CheckPageTitle, doc);
     contextmenu.record(e);
+}
+
+TestRecorder.ContextMenu.prototype.doMarker = function() {
+  var e = new TestRecorder.MarkerEvent(contextmenu.x, contextmenu.y);
+  contextmenu.record(e);
 }
 
 TestRecorder.ContextMenu.prototype.doScreenShot = function() {
@@ -891,7 +907,6 @@ TestRecorder.Recorder.prototype.start = function() {
     var actualCode = '(' + function() {
         var overloadStopPropagation = Event.prototype.stopPropagation;
         Event.prototype.stopPropagation = function(){
-            //console.log(this);
             overloadStopPropagation.apply(this, arguments);
         };
     } + ')();';
@@ -903,18 +918,16 @@ TestRecorder.Recorder.prototype.start = function() {
     //this.highlighter.start();
 
     this.active = true;
-
     this.log("recorder started");
 }
 
 TestRecorder.Recorder.prototype.stop = function() {
     this.releaseEvents();
-    this.active = false;
 
     //this.highlighter.stop();
 
+    this.active = false;
     this.log("recorder stopped");
-    return;
 }
 
 TestRecorder.Recorder.prototype.open = function(url) {

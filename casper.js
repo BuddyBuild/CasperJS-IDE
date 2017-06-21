@@ -1,7 +1,7 @@
-// ---------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // CasperRenderer -- a class to render recorded tests to a CasperJS
 // test format.
-// ---------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 
 if (typeof(EventTypes) == "undefined") {
   EventTypes = {};
@@ -31,6 +31,7 @@ EventTypes.MouseUp = 20;
 EventTypes.MouseDrag = 21;
 EventTypes.MouseDrop = 22;
 EventTypes.KeyUp = 23;
+EventTypes.Marker = 24;
 
 function CasperRenderer(document) {
   this.document = document;
@@ -126,6 +127,7 @@ d[EventTypes.ScreenShot] = "screenShot";
 d[EventTypes.MouseUp] = "mouseup"; */
 d[EventTypes.MouseDrag] = "mousedrag";
 d[EventTypes.KeyUp] = "keyup";
+d[EventTypes.Marker] = "marker";
 
 CasperRenderer.prototype.dispatch = d;
 
@@ -145,8 +147,8 @@ CasperRenderer.prototype.render = function(with_xy) {
     if (item.type == etypes.Comment)
       this.space();
 
-    if(i==0) {
-        if(item.type!=etypes.OpenUrl) {
+    if (i == 0) {
+        if (item.type != etypes.OpenUrl) {
             this.text("ERROR: the recorded sequence does not start with a url openning.");
         } else {
           this.startUrl(item);
@@ -155,12 +157,12 @@ CasperRenderer.prototype.render = function(with_xy) {
     }
 
     // remember last MouseDown to identify drag
-    if(item.type==etypes.MouseDown) {
+    if (item.type == etypes.MouseDown) {
       last_down = this.items[i];
       continue;
     }
-    if(item.type==etypes.MouseUp && last_down) {
-      if(last_down.x == item.x && last_down.y == item.y) {
+    if (item.type == etypes.MouseUp && last_down) {
+      if (last_down.x == item.x && last_down.y == item.y) {
         forget_click = false;
         continue;
       } else {
@@ -171,14 +173,14 @@ CasperRenderer.prototype.render = function(with_xy) {
         continue;
       }
     }
-    if(item.type==etypes.Click && forget_click) {
+    if (item.type == etypes.Click && forget_click) {
       forget_click = false;
       continue;
     }
 
     // we do not want click due to user checking actions
-    if(i>0 && item.type==etypes.Click &&
-            ((this.items[i-1].type>=etypes.CheckPageTitle && this.items[i-1].type<=etypes.CheckImageSrc) || this.items[i-1].type==etypes.ScreenShot)) {
+    if (i > 0 && item.type == etypes.Click &&
+            ((this.items[i-1].type >= etypes.CheckPageTitle && this.items[i-1].type <= etypes.CheckImageSrc) || this.items[i-1].type == etypes.ScreenShot)) {
         continue;
     }
 
@@ -209,8 +211,6 @@ CasperRenderer.prototype.writeHeader = function() {
   this.stmt("var image  = casper.cli.options.image || 'screenshot.png';", 0);
   this.space();
   this.stmt("var multiplier   = retina ? 2 : 1;", 0);
-  this.stmt("var lastX        = 0;", 0);
-  this.stmt("var lastY        = 0;", 0);
   this.stmt("var postProcess  = '';", 0);
 }
 CasperRenderer.prototype.writeFooter = function() {
@@ -326,8 +326,6 @@ CasperRenderer.prototype.mousedrag = function(item) {
     this.stmt('  this.mouse.down('+ item.before.x + ', '+ item.before.y +');');
     this.stmt('  this.mouse.move('+ item.x + ', '+ item.y +');');
     this.stmt('  this.mouse.up('+ item.x + ', '+ item.y +');');
-    this.stmt('  lastX = '+ item.x + ' * multiplier;');
-    this.stmt('  lastY = '+ item.y + ' * multiplier;');
     this.stmt('});');
   }
 }
@@ -337,8 +335,6 @@ CasperRenderer.prototype.click = function(item) {
   if (this.with_xy && !(tag == 'a' || tag == 'input' || tag == 'button')) {
     this.stmt('casper.then(function() {');
     this.stmt('  this.mouse.click('+ item.x + ', '+ item.y +');');
-    this.stmt('  lastX = '+ item.x + ' * multiplier;');
-    this.stmt('  lastY = '+ item.y + ' * multiplier;');
     this.stmt('});');
   } else {
     var selector;
@@ -358,10 +354,6 @@ CasperRenderer.prototype.click = function(item) {
     this.space();
     this.stmt('casper.' + this.waitForFunction + '(' + selector + ',', 0);
     this.stmt('  function success() {', 0);
-    if (item.x != null || item.y != null) {
-      this.stmt('    lastX = '+ item.x + ' * multiplier;', 0);
-      this.stmt('    lastY = '+ item.y + ' * multiplier;', 0);
-    }
     this.stmt('    this.click('+ selector + ');', 0);
     this.stmt('  },', 0);
     this.stmt('  function fail() {', 0);
@@ -464,9 +456,15 @@ CasperRenderer.prototype.screenShot = function(item) {
   this.space();
   this.stmt('casper.then(function() {', 0);
   this.stmt('  this.captureSelector(image, "html");', 0);
-  this.stmt("  postProcess = 'Marker: ' + lastX + 'x' + lastY + " + '"\\n";', 0);
   this.stmt('});', 0);
   this.screen_id += 1;
+}
+
+CasperRenderer.prototype.marker = function(item) {
+  this.space()
+  this.stmt('casper.then(function() {', 0);
+  this.stmt("  postProcess = 'Marker: ' + (" + item.x + " * multiplier) + 'x' + (" + item.y + " * multiplier) + " + '"\\n";', 0);
+  this.stmt('});', 0);
 }
 
 CasperRenderer.prototype.comment = function(item) {
