@@ -39,7 +39,6 @@ function CasperRenderer(document) {
   this.items = null;
   this.history = new Array();
   this.last_events = new Array();
-  this.screen_id = 1;
   this.unamed_element_id = 1;
 }
 
@@ -49,6 +48,10 @@ CasperRenderer.prototype.waitForFunction = 'waitUntilVisible';
 CasperRenderer.prototype.text = function(txt) {
   // todo: long lines
   this.document.writeln(txt);
+}
+
+CasperRenderer.prototype.heredoc = function(fn) {
+  return fn.toString().match(/\/\*\s*([\s\S]*?)\s*\*\//m)[1];
 }
 
 CasperRenderer.prototype.stmt = function(text, indent) {
@@ -205,23 +208,36 @@ CasperRenderer.prototype.writeHeader = function() {
   this.stmt("  verbose: false,", 0);
   this.stmt('  logLevel: "debug"', 0);
   this.stmt("});", 0);
-  this.stmt("var x = casper.selectXPath;", 0);
+  this.stmt("var x      = casper.selectXPath;", 0);
   this.space();
   this.stmt("var retina = casper.cli.options.noretina ? false : true;", 0);
-  this.stmt("var image  = casper.cli.options.image || 'screenshot.png';", 0);
+  this.stmt("var dir    = casper.cli.options.dir    || '.';", 0);
+  this.stmt("var image  = casper.cli.options.image  || 'screenshot.png';", 0);
   this.space();
-  this.stmt("var multiplier   = retina ? 2 : 1;", 0);
-  this.stmt("var postProcess  = '';", 0);
+  this.stmt("var postProcess    = '';", 0);
+  this.stmt("var multiplier     = retina ? 2 : 1;", 0);
+  this.stmt("var image_filename = image;", 0);
+  this.stmt("var image_path     = image;", 0);
+  this.stmt("var image_count    = 1;", 0);
 }
+
 CasperRenderer.prototype.writeFooter = function() {
   this.space();
-  this.stmt('casper.then(function () {', 0);
-  this.stmt('  if (postProcess.length) {', 0);
-  this.stmt('    console.log(postProcess);', 0);
-  this.stmt('  }', 0);
-  this.stmt('});', 0);
-  this.stmt("casper.run();", 0);
+
+  var code = this.heredoc(function () {/*
+casper.then(function () {
+  if (image_count > 2) {
+    image_filename = image + "." + image_count + ".png";
+    image_path = dir + "/" + image_filename;
   }
+  postProcess += "Write: '" + image_path + "'\n";
+  console.log(postProcess);
+});
+casper.run();
+  */});
+  this.stmt(code, 0);
+}
+
 CasperRenderer.prototype.rewriteUrl = function(url) {
   return url;
 }
@@ -454,16 +470,30 @@ CasperRenderer.prototype.screenShot = function(item) {
   this.stmt('  }', 0);
   this.stmt('});', 0);
   this.space();
-  this.stmt('casper.then(function() {', 0);
-  this.stmt('  this.captureSelector(image, "html");', 0);
-  this.stmt('});', 0);
-  this.screen_id += 1;
+
+  var code = this.heredoc(function () {/*
+casper.then(function() {
+  if (image_count > 1) {
+    image_filename = image + '.' + image_count + '.png';
+    image_path = dir +'/'+ image_filename;
+    postProcess += "Write: '" + image_filename + "'\n";
+  }
+
+  image_path = dir +'/'+ image_filename;
+  this.echo("Capturing screenshot to '"+ image_path +"'", "INFO");
+  this.captureSelector(image_path, "html");
+
+  postProcess += "Read: '" + image_path + "'\n";
+  image_count += 1;
+});
+  */});
+  this.stmt(code, 0);
 }
 
 CasperRenderer.prototype.marker = function(item) {
   this.space()
   this.stmt('casper.then(function() {', 0);
-  this.stmt("  postProcess = 'Marker: ' + (" + item.x + " * multiplier) + 'x' + (" + item.y + " * multiplier) + " + '"\\n";', 0);
+  this.stmt("  postProcess += 'Marker: ' + (" + item.x + " * multiplier) + 'x' + (" + item.y + " * multiplier) + " + '"\\n";', 0);
   this.stmt('});', 0);
 }
 
